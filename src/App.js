@@ -1,23 +1,32 @@
-import logo from './logo.svg';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Layout from "./pages/Layout.js";
+import Cadastro from './pages/Cadastro.js';
+import Pessoas from './pages/Pessoas.js';
+import UFs from './pages/ufs/index.js';
+import Municipios from './pages/Municipios.js';
+import Bairros from './pages/Bairros.js';
+import NotFound from './pages/NotFound.js';
+import Navbar from './Layouts/Navbar.js';
 import './App.css';
+import UFsEdit from './pages/ufs/components/UFs-Edit.js';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <BrowserRouter>
+        <Navbar />
+        <div className="container">
+          <Routes path="/" element={<Layout />}>
+              <Route index element={<Cadastro />}/>
+              <Route path="pessoas" element={<Pessoas />} />
+              <Route path="ufs" element={<UFs />} />
+              <Route path="ufs/*" element={<UFsEdit />} />
+              <Route path="municipios" element={<Municipios />} />
+              <Route path="bairros" element={<Bairros />} />
+              <Route path="*" element={<NotFound />} />
+          </Routes>
+        </div>
+      </BrowserRouter>
     </div>
   );
 }
