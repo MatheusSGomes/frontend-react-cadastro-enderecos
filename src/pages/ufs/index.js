@@ -44,7 +44,25 @@ function UFs() {
         setMessage(res.data.mensagem);
         getData();
       })
-      .catch(error => setMessage(error.response.data.mensagem));
+      .catch(error => {
+        setMessage(error.response.data.mensagem);
+      });
+  }
+
+  const updateUf = (codigo) => {
+    axios
+      .put(`http://localhost:8000/api/uf/${codigo}`, {
+        nome: nome,
+        sigla: sigla,
+        status: 1
+      })
+      .then(res => {
+        setMessage('UF atualizada com sucesso');
+        getData();
+      })
+      .catch(error => {
+        setMessage(error.response.data.mensagem);
+      });
   }
 
   const deleteUf = (id) => {
@@ -73,12 +91,17 @@ function UFs() {
     }
   }
 
+  function onClickCadastrarUf () {
+    setNome('');
+    setSigla('');
+  }
+
   return (
     <div>
       <h2 className="mt-4">Lista de UFs</h2>
       <hr />
 
-      <button type="button" className="btn btn-primary mb-4" data-bs-toggle="modal" data-bs-target="#exampleModal">
+      <button type="button" className="btn btn-primary mb-4" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={onClickCadastrarUf}>
         Cadastrar UF
       </button>
 
@@ -107,16 +130,37 @@ function UFs() {
       {renderMessage()}
 
       <ul className="list-group mb-4">
-        {/* <UFsList /> */}
-        
-        {data.map((uf, index) => (<li key={index} className="list-group-item d-flex justify-content-between align-items-center">
-          {uf.sigla} - {uf.nome}
-          <div>
-            <a href={`api/uf/${uf.codigo_uf}`} className="btn btn-primary">Editar</a>
+        {data.map((uf, index) => (
+          <li key={index} id={uf.codigo_uf} className="list-group-item d-flex justify-content-between align-items-center">
+            {uf.sigla} - {uf.nome}
+            <div>
+              <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target={`#modalEditarUF${uf.codigo_uf}`}>Editar</button>
+              <Button onClick={() => deleteUf(uf.codigo_uf)} className="btn btn-danger" style={formDeleteStyle}>Apagar</Button>
+            </div>
 
-            <Button onClick={() => deleteUf(uf.codigo_uf)} className="btn btn-danger" style={formDeleteStyle}>Apagar</Button>
-          </div>
-        </li>))}
+            <div className="modal fade" id={`modalEditarUF${uf.codigo_uf}`} tabIndex="-1" aria-labelledby={`modalLabelUF${uf.codigo_uf}`} aria-hidden="true">
+              <div className="modal-dialog modal-md">
+                <div className="modal-content">
+                  <div className="modal-header">
+                    <h1 className="modal-title fs-5" id={`modalLabelUF${uf.codigo_uf}`}>Editar UF</h1>
+                    <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <Form className="modal-body row g-3" onSubmit={() => updateUf(uf.codigo_uf)}>
+                      <Form.Field className='col-8'>
+                        <label htmlFor="nome" className="form-label">Nome</label>
+                        <input type="text" className="form-control" id="nome" name="nome" onChange={(e) => setNome(e.target.value)} defaultValue={uf.nome} />
+                      </Form.Field>
+                      <Form.Field className='col-4'>
+                        <label htmlFor="sigla" className="form-label">Sigla</label>
+                        <input type="text" className="form-control" id="sigla" name="sigla" onChange={(e) => setSigla(e.target.value)} defaultValue={uf.sigla} />
+                      </Form.Field>
+                      <Button type='submit' className="btn btn-primary">Atualizar</Button>
+                  </Form>
+                </div>
+              </div>
+            </div>
+          </li>
+        ))}
       </ul>
     </div>
   );
