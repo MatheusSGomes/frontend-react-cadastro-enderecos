@@ -3,7 +3,7 @@ import Layout from "./pages/Layout.js";
 import Cadastro from './pages/Cadastro.js';
 import Pessoas from './pages/Pessoas.js';
 import UFs from './pages/ufs/index.js';
-import Municipios from './pages/Municipios.js';
+import Municipios from './pages/municipios/index.js';
 import Bairros from './pages/Bairros.js';
 import NotFound from './pages/NotFound.js';
 import Navbar from './Layouts/Navbar.js';
