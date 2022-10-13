@@ -1,12 +1,14 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Button, Form } from "semantic-ui-react";
+import './bairros.css';
 
 function Bairros() {
   const [bairros, setBairros] = useState([]);
   const [municipios, setMunicipios] = useState([]);
   const [nomeBairro, setNomeBairro] = useState('');
   const [codigoMunicipio, setCodigoMunicipio] = useState('');
+  const [message, setMessage] = useState('');
 
   useEffect(() => {
     axios
@@ -34,6 +36,8 @@ function Bairros() {
       })
       .then(res => {
         getBairros();
+        setMessage(res.data.mensagem);
+        clearInputs();
       });
   }
 
@@ -46,13 +50,33 @@ function Bairros() {
       })
       .then(res => {
         getBairros();
+        setMessage('Bairro atualizado com sucesso');
       })
   }
 
   const deleteBairros = (id) => {
     axios
       .delete(`http://localhost:8000/api/bairro/${id}`)
-      .then(res => getBairros());
+      .then(res => {
+        getBairros();
+        setMessage('Bairro apagado com sucesso');
+      });
+  }
+
+  const renderMessage = () => {
+    if (message != '') {
+      return (
+        <div className="alert alert-success alert-dismissible fade show" role="alert">
+          {message}
+          <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div> 
+      );
+    }
+  }
+
+  const clearInputs = () => {
+    setNomeBairro('');
+    setCodigoMunicipio('');
   }
 
   return (
@@ -116,10 +140,7 @@ function Bairros() {
         </div>
       </div>
 
-      <div className="alert alert-success alert-dismissible fade show" role="alert">
-        Mensagem sucesso
-        <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-      </div>  
+      {renderMessage()}
 
       <ul className="list-group mb-4">
         {bairros.map((bairro) => (
@@ -133,7 +154,7 @@ function Bairros() {
                 data-bs-target={`#modalEditarBairro${bairro.codigo_bairro}`}
               >Editar</Button>
 
-              <Button className="btn btn-danger" onClick={() => deleteBairros(bairro.codigo_bairro)}>Apagar</Button>
+              <Button className="btn btn-danger botao-apagar" onClick={() => deleteBairros(bairro.codigo_bairro)}>Apagar</Button>
             </div>
 
             <div className="modal fade" id={`modalEditarBairro${bairro.codigo_bairro}`} tabIndex="-1" aria-labelledby="modalLabelBairro" aria-hidden="true">
