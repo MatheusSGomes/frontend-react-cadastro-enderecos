@@ -121,7 +121,7 @@ function UFs() {
                   <label htmlFor="sigla" className="form-label">Sigla</label>
                   <input type="text" className="form-control" id="sigla" name="sigla" onChange={(e) => setSigla(e.target.value)} value={sigla} />
                 </Form.Field>
-                <Button type='submit' className="btn btn-primary" onClick={postUf} >Cadastrar</Button>
+                <Button type='submit' className="btn btn-primary" onClick={postUf} data-bs-dismiss="modal">Cadastrar</Button>
             </Form>
           </div>
         </div>
@@ -154,7 +154,7 @@ function UFs() {
                         <label htmlFor="sigla" className="form-label">Sigla</label>
                         <input type="text" className="form-control" id="sigla" name="sigla" onChange={(e) => setSigla(e.target.value)} defaultValue={uf.sigla} />
                       </Form.Field>
-                      <Button type='submit' className="btn btn-primary">Atualizar</Button>
+                      <Button type='submit' className="btn btn-primary" data-bs-dismiss="modal">Atualizar</Button>
                   </Form>
                 </div>
               </div>

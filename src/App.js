@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Layout from "./pages/Layout.js";
-import Cadastro from './pages/Cadastro.js';
-import Pessoas from './pages/Pessoas.js';
+import Cadastro from './pages/index.js';
+import Pessoas from './pages/pessoas/index.js';
 import UFs from './pages/ufs/index.js';
 import Municipios from './pages/municipios/index.js';
 import Bairros from './pages/bairros/index.js';

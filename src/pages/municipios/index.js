@@ -118,7 +118,7 @@ function Municipios() {
                 <div className="col-3">
                   <label htmlFor="uf" className="form-label">UF</label>
                   <select id="uf" name="uf" className="form-select" onChange={(e) => setUfMunicipio(e.target.value)}>
-                    <option disabled>Escolha...</option>
+                    <option value="DEFAULT" disabled>Escolha...</option>
                     {ufs.map((uf) => (
                       <option key={uf.codigo_uf} value={uf.codigo_uf}>{uf.sigla}</option>
                     ))}
@@ -127,7 +127,7 @@ function Municipios() {
               </div>
               <div className="modal-footer">
                 <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-                <Button type="submit" className="btn btn-primary">Salvar</Button>
+                <Button type="submit" className="btn btn-primary" data-bs-dismiss="modal">Salvar</Button>
               </div>
             </Form>
           </div>

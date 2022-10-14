@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Button, Form } from "semantic-ui-react";
-import './bairros.css';
+import './style.css';
 
 function Bairros() {
   const [bairros, setBairros] = useState([]);
@@ -133,7 +133,7 @@ function Bairros() {
               </div>
               <div className="modal-footer">
                 <Button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Fechar</Button>
-                <Button type="submit" className="btn btn-primary">Salvar</Button>
+                <Button type="submit" className="btn btn-primary" data-bs-dismiss="modal">Salvar</Button>
               </div>            
             </Form>
           </div>
@@ -161,7 +161,7 @@ function Bairros() {
               <div className="modal-dialog modal-md">
                 <div className="modal-content">
                   <div className="modal-header">
-                    <h1 className="modal-title fs-5" id="modalLabelBairro">Editar Município</h1>
+                    <h1 className="modal-title fs-5" id="modalLabelBairro">Editar Bairro</h1>
                     <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
                   <Form className="modal-body row g-3" onSubmit={() => updateBairro(bairro.codigo_bairro)}>
@@ -193,13 +193,12 @@ function Bairros() {
                       
                     <div className="modal-footer p-0 pt-1">
                       <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-                      <Button type='submit' className="btn btn-primary">Atualizar</Button>
+                      <Button type='submit' className="btn btn-primary" data-bs-dismiss="modal">Atualizar</Button>
                     </div>
                   </Form>
                 </div>
               </div>
             </div>
-
           </li>
         ))}
       </ul>
