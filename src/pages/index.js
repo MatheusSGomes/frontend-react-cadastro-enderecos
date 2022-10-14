@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Form } from 'semantic-ui-react';
 
 const Cadastro = () => {
@@ -8,12 +8,6 @@ const Cadastro = () => {
   const [idade, setIdade] = useState('');
   const [login, setLogin] = useState('');
   const [senha, setSenha] = useState('');
-
-  const [rua, setRua]  = useState('');
-  const [numero, setNumero] = useState('');
-  const [bairro, setBairro] = useState('');
-  const [cep, setCep] = useState('');
-  const [complemento, setComplemento] = useState('');
 
   const [enderecos, setEnderecos] = useState([]);
   
@@ -35,7 +29,7 @@ const Cadastro = () => {
     setEnderecos((prevState) => [
       ...prevState,
       {
-        codigoBairro: 'Código Bairro',
+        codigoBairro: 11,
         nomeRua: 'Rua',
         numero: 'Número',
         complemento: 'Complemento',
@@ -47,6 +41,24 @@ const Cadastro = () => {
 
   const removerEndereco = (key) => {
     setEnderecos((prevState) => prevState.filter(endereco => endereco.key != key));
+  }
+
+  const handleInputChange = (key, event) => {
+    setEnderecos((prevState) => {
+      const newState = prevState.map((endereco) => {
+        if (endereco.key == key) {
+          return {
+            ...endereco,
+            [event.target.name]: event.target.value
+          }
+        }
+        console.log(endereco);
+        return endereco;
+      });
+      
+      console.log(newState);
+      return newState;
+    });
   }
 
   return (
@@ -119,7 +131,7 @@ const Cadastro = () => {
                 type="password" 
                 className="form-control" 
                 id="senha" 
-                name="senha" 
+                name="senha"
                 onChange={(e) => setSenha(e.target.value)}
               />
             </div>
@@ -150,8 +162,9 @@ const Cadastro = () => {
                         type="text" 
                         className="form-control" 
                         id="rua" 
-                        name="enderecos[1][rua]" 
-                        onChange={(e) => setRua(e.target.value)}
+                        name="nomeRua"
+                        value={endereco.nomeRua}
+                        onChange={(e) => handleInputChange(endereco.key, e)}
                       />
                     </div>
                 
@@ -161,8 +174,9 @@ const Cadastro = () => {
                         type="text" 
                         className="form-control" 
                         id="numero" 
-                        name="enderecos[1][numero]" 
-                        onChange={(e) => setNumero(e.target.value)}
+                        name="numero"
+                        value={endereco.numero}
+                        onChange={(e) => handleInputChange(endereco.key, e)}
                       />
                     </div>
                 
@@ -171,9 +185,10 @@ const Cadastro = () => {
                       <select 
                         id="bairro" 
                         className="form-select" 
-                        name="enderecos[1][bairro]"
-                        onChange={(e) => setBairro(e.target.value)}>
-
+                        name="codigoBairro"
+                        value={endereco.codigoBairro}
+                        onChange={(e) => handleInputChange(endereco.key, e)}
+                      >
                         <option selected disabled>Escolha...</option>
                         
                           <option value="{{ $bairro->codigo_bairro }}"> bairro nome </option>
@@ -187,8 +202,9 @@ const Cadastro = () => {
                         type="text" 
                         className="form-control" 
                         id="cep" 
-                        name="enderecos[1][cep]" 
-                        onChange={(e) => setCep(e.target.value)}
+                        name="cep"
+                        value={endereco.cep}
+                        onChange={(e) => handleInputChange(endereco.key, e)}
                       />
                     </div>
                 
@@ -198,8 +214,9 @@ const Cadastro = () => {
                         type="text" 
                         className="form-control" 
                         id="complemento" 
-                        name="enderecos[1][complemento]" 
-                        onChange={(e) => setComplemento(e.target.value)}  
+                        name="complemento"
+                        value={endereco.complemento}
+                        onChange={(e) => handleInputChange(endereco.key, e)}  
                       />
                     </div>
                   </div>
