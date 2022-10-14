@@ -132,9 +132,16 @@ function UFs() {
       <ul className="list-group mb-4">
         {data.map((uf, index) => (
           <li key={index} id={uf.codigo_uf} className="list-group-item d-flex justify-content-between align-items-center">
-            {uf.sigla} - {uf.nome}
+            <div class="form-check form-switch" style={{display: 'inline-block'}}>
+              {/* <label class="form-check-label" for="flexSwitchCheckDefault"></label> */}
+              <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" />
+              {uf.sigla} - {uf.nome}
+            </div>
+
+
             <div>
               <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target={`#modalEditarUF${uf.codigo_uf}`}>Editar</button>
+
               <Button onClick={() => deleteUf(uf.codigo_uf)} className="btn btn-danger" style={formDeleteStyle}>Apagar</Button>
             </div>
 
