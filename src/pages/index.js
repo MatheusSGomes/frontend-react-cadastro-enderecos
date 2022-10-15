@@ -1,15 +1,22 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { Button, Form } from 'semantic-ui-react';
+import  { Link } from 'react-router-dom';
 
 const Cadastro = () => {
+  const [enderecos, setEnderecos] = useState([]);
+  const [bairros, setBairros] = useState([]);
   const [nome, setNome] = useState('');
   const [sobrenome, setSobrenome] = useState('');
   const [idade, setIdade] = useState('');
   const [login, setLogin] = useState('');
   const [senha, setSenha] = useState('');
+  const [message, setMessage] = useState('');
 
-  const [enderecos, setEnderecos] = useState([]);
+
+  useEffect(() => {
+    getBairros();
+  }, [])
   
   const postPessoa = () => {
     axios
@@ -22,18 +29,20 @@ const Cadastro = () => {
         status: 1,
         enderecos: [...enderecos]
       })
-      .then(res => console.log(res));
+      .then(res => {
+        setMessage(res.data.mensagem);
+      });
   }
 
   const adicionarEndereco = () => {
     setEnderecos((prevState) => [
       ...prevState,
       {
-        codigoBairro: 11,
-        nomeRua: 'Rua',
-        numero: 'Número',
-        complemento: 'Complemento',
-        cep: 'CEP',
+        codigoBairro: '',
+        nomeRua: '',
+        numero: '',
+        complemento: '',
+        cep: '',
         key: Date.now()
       }
     ]);
@@ -52,13 +61,29 @@ const Cadastro = () => {
             [event.target.name]: event.target.value
           }
         }
-        console.log(endereco);
+
         return endereco;
       });
       
-      console.log(newState);
       return newState;
     });
+  }
+
+  const getBairros = () => {
+    axios
+      .get('http://localhost:8000/api/bairro')
+      .then(res => setBairros(res.data));
+  }
+
+  const renderMessage = () => {
+    if (message != '') {
+      return (
+        <div className="alert alert-success alert-dismissible fade show" role="alert">
+          {message}
+          <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>  
+      );
+    }
   }
 
   return (
@@ -70,11 +95,7 @@ const Cadastro = () => {
       
       <h2 className="mb-4">Cadastro de Usuário</h2>
 
-      
-      <div className="alert alert-success alert-dismissible fade show" role="alert">
-        Mensagem sucesso
-        <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-      </div>  
+      {renderMessage()}
       
       <Form className="row g-3 mb-5" method="POST" onSubmit={() => postPessoa()}>
 
@@ -152,7 +173,7 @@ const Cadastro = () => {
         <div className="enderecos" id="enderecos">
             {enderecos.map((endereco, index) => (
               <div className="endereco">
-                <h3 className="mt-4 mb-4">Cadastrar novo endereço ({index + 1})</h3>
+                <h3 className="mt-4 mb-4">Cadastrar endereço ({index + 1})</h3>
                 <hr />
                 <div key={endereco.key}>
                   <div className="row g-3">
@@ -189,10 +210,9 @@ const Cadastro = () => {
                         value={endereco.codigoBairro}
                         onChange={(e) => handleInputChange(endereco.key, e)}
                       >
-                        <option selected disabled>Escolha...</option>
-                        
-                          <option value="{{ $bairro->codigo_bairro }}"> bairro nome </option>
-
+                        {bairros.map((bairro) => (
+                          <option value={bairro.codigo_bairro}>{bairro.nome}</option>
+                        ))}
                       </select>
                     </div>  
                 
@@ -231,9 +251,13 @@ const Cadastro = () => {
               </div>
             ))}
         </div>
-
         <div className="col-12">
-          <Button type="submit" className="btn btn-primary">Cadastrar</Button>
+          <Button 
+            type="submit" 
+            className="btn btn-primary"
+          >
+            Cadastrar
+          </Button>
         </div>
       </Form>
     </div>
