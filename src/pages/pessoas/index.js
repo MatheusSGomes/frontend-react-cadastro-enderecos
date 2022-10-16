@@ -53,36 +53,64 @@ function Pessoas () {
       .then(res => getPessoas());
   }
 
-  const newEndereco = (id_usuario) => {
-    console.log('Endereço cadastrado! Usuário: ', id_usuario);
+  const novoEndereco = (id_usuario) => {
+    function findPessoa(pess) {
+      return pess.codigo_pessoa == id_usuario;
+    }
+
+    const pessFind = pessoas.find(findPessoa);
+
     axios
       .put(`http://localhost:8000/api/pessoa/${id_usuario}`, {
-        codigo_pessoa: id_usuario,
-        codigo_bairro: bairroEndereco,
-        nome_rua: ruaEndereco,
-        numero: numeroEndereco,
-        cep: cepEndereco,
-        complemento: complementoEndereco
+        codigo_pessoa: pessFind.codigo_pessoa,
+        nome: pessFind.nome,
+        sobrenome: pessFind.sobrenome,
+        idade: pessFind.idade,
+        login: pessFind.login,
+        senha: pessFind.senha,
+        enderecos: [
+          {
+            "codigo_endereco": null,
+            "codigo_pessoa": pessFind.codigo_pessoa,
+            "codigoBairro": bairroEndereco,
+            "nomeRua": ruaEndereco,
+            "numero": numeroEndereco,
+            "complemento": complementoEndereco,
+            "cep": cepEndereco
+          }
+        ]
       })
-      .then(res => {
-        getPessoas();
-      });
+      .then(res => getPessoas());
   }
 
-  const updateEndereco = (id) => {
-    // Erro no código do endereço, sendo passado o do usuário
-    // axios
-    //   .put(`http://localhost:8000/api/pessoa/${id}`, {
-    //     codigo_endereco: id,
-    //     codigo_bairro: bairroEndereco,
-    //     nome_rua: ruaEndereco,
-    //     numero: numeroEndereco,
-    //     cep: cepEndereco,
-    //     complemento: complementoEndereco
-    //   })
-    //   .then(res => {
-    //     getPessoas();
-    //   });
+  const updateEndereco = (codigo_pessoa, codigo_endereco) => {
+    function findPessoa(pess) {
+      return pess.codigo_pessoa == codigo_pessoa;
+    }
+    
+    const pessFind = pessoas.find(findPessoa);
+
+    axios
+      .put(`http://localhost:8000/api/pessoa/${codigo_pessoa}`, {
+        codigo_pessoa: pessFind.codigo_pessoa,
+        nome: pessFind.nome,
+        sobrenome: pessFind.sobrenome,
+        idade: pessFind.idade,
+        login: pessFind.login,
+        senha: pessFind.senha,
+        enderecos: [
+          {
+            "codigo_endereco": codigo_endereco,
+            "codigo_pessoa": pessFind.codigo_pessoa,
+            "codigoBairro": bairroEndereco,
+            "nomeRua": ruaEndereco,
+            "numero": numeroEndereco,
+            "complemento": complementoEndereco,
+            "cep": cepEndereco
+          }
+        ]
+      })
+      .then(res => getPessoas());
   }
 
   const deletePessoa = (id) => {
@@ -90,6 +118,21 @@ function Pessoas () {
       .delete(`http://localhost:8000/api/pessoa/${id}`)
       .then(res => {
         getPessoas();
+        console.log(res);
+      });
+  }
+
+  const deleteEndereco = (codigo_endereco, codigo_pessoa) => {
+    axios
+      .delete(`http://localhost:8000/api/pessoa/${codigo_pessoa}`, {
+        data: {
+          "codigo_pessoa": codigo_pessoa,
+          "codigo_endereco": codigo_endereco
+        }
+      })
+      .then((res) => {
+        getPessoas();
+        console.log(res);
       });
   }
 
@@ -199,9 +242,17 @@ function Pessoas () {
 
                         <div className="modal-body">
                           <h3 className="mb-2">Endereços</h3>
-                          <Button type="button" className="btn btn-sm btn-secondary mb-3" data-bs-target="#modalAdicionarEnderecoToggle" data-bs-toggle="modal" data-bs-dismiss="modal">Adicionar Endereço</Button>
+                          <Button 
+                            type="button" 
+                            className="btn btn-sm btn-secondary mb-3" 
+                            // data-bs-target="#modalAdicionarEnderecoToggle" 
+                            data-bs-target={`#modalAdicionarEnderecoToggle${pessoa.codigo_pessoa}`} 
+                            data-bs-toggle="modal" 
+                            data-bs-dismiss="modal"
+                          >
+                            Adicionar Endereço
+                          </Button>
 
-                          {/* ENDEREÇOS */}
                           <ul className="list-group">
                             {pessoa.enderecos.map((endereco, index) => (
                               <li className="list-group-item d-flex justify-content-between align-items-center" key={index}>
@@ -218,6 +269,7 @@ function Pessoas () {
                                   <Button 
                                     type="button" 
                                     className="btn btn-sm btn-danger botao-apagar"
+                                    onClick={() => deleteEndereco(endereco.codigo_endereco, pessoa.codigo_pessoa)}
                                   >Apagar</Button>
                                 </div>
                               </li>
@@ -245,7 +297,7 @@ function Pessoas () {
                           <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
 
-                        <Form onSubmit={() => updateEndereco(endereco.codigo_endereco)}>
+                        <Form onSubmit={() => updateEndereco(pessoa.codigo_pessoa ,endereco.codigo_endereco)}>
                           <div className="modal-body">
                             <div className="row g-3">
                               <div className="col-4">
@@ -315,11 +367,23 @@ function Pessoas () {
                           </div>
 
                           <div className="modal-footer">
-                            <Button type="button" className="btn btn-secondary" data-bs-target={`#modalEditarPessoa${endereco.codigo_pessoa}`} data-bs-toggle="modal" data-bs-dismiss="modal">Voltar</Button>
-                            <Button type="submit" className="btn btn-primary" data-bs-target={`#modalEditarPessoa${endereco.codigo_pessoa}`} data-bs-toggle="modal" data-bs-dismiss="modal">Salvar</Button>
+                            <Button 
+                              type="button" 
+                              className="btn btn-secondary" 
+                              data-bs-target={`#modalEditarPessoa${endereco.codigo_pessoa}`} 
+                              data-bs-toggle="modal" 
+                              data-bs-dismiss="modal"
+                            >Voltar</Button>
+                            
+                            <Button 
+                              type="submit" 
+                              className="btn btn-primary" 
+                              data-bs-target={`#modalEditarPessoa${endereco.codigo_pessoa}`} 
+                              data-bs-toggle="modal" 
+                              data-bs-dismiss="modal"
+                            >Salvar</Button>
                           </div>
                         </Form>
-
                       </div>
                     </div>
                   </div>
@@ -327,15 +391,15 @@ function Pessoas () {
               </div>
 
               {/* MODAL ADICIONAR ENDEREÇO */}
-              <div className="modal fade" id="modalAdicionarEnderecoToggle" aria-hidden="true" aria-labelledby="modalAdicionarEnderecoToggleLabel" tabIndex="-1">
+              <div className="modal fade" id={`modalAdicionarEnderecoToggle${pessoa.codigo_pessoa}`} aria-hidden="true" aria-labelledby={`modalAdicionarEnderecoToggleLabel${pessoa.codigo_pessoa}`} tabIndex="-1">
                 <div className="modal-dialog modal-dialog-centered modal-lg">
                   <div className="modal-content">
                     <div className="modal-header">
-                      <h5 className="modal-title" id="modalAdicionarEnderecoToggleLabel">Cadastrar Endereço</h5>
+                      <h5 className="modal-title" id={`modalAdicionarEnderecoToggleLabel${pessoa.codigo_pessoa}`}>Cadastrar novo endereço - {pessoa.nome}</h5>
                       <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
 
-                    <Form onSubmit={() => newEndereco(pessoa.codigo_pessoa)}>
+                    <Form onSubmit={() => novoEndereco(pessoa.codigo_pessoa)}>
                       <div className="modal-body">            
                         <div className="row g-3">
                           <div className="col-4">
@@ -397,8 +461,9 @@ function Pessoas () {
                         </div>              
                       </div>
                       <div className="modal-footer">
-                        <Button type="button" className="btn btn-secondary" data-bs-target="#modalEditarPessoa22" data-bs-toggle="modal" data-bs-dismiss="modal">Voltar</Button>
-                        <Button type="submit" className="btn btn-primary" data-bs-target="#modalEditarPessoa22" data-bs-toggle="modal" data-bs-dismiss="modal">Salvar</Button>
+                      
+                        <Button type="button" className="btn btn-secondary" data-bs-target={`#modalEditarPessoa${pessoa.codigo_pessoa}`} data-bs-toggle="modal" data-bs-dismiss="modal">Voltar</Button>
+                        <Button type="submit" className="btn btn-primary" data-bs-target={`#modalEditarPessoa${pessoa.codigo_pessoa}`} data-bs-toggle="modal" data-bs-dismiss="modal">Salvar</Button>
                       </div>
                     </Form>
                   </div>
@@ -408,9 +473,6 @@ function Pessoas () {
           );
         })}
       </ul>
-
-      
-
     </div>
   );
 }

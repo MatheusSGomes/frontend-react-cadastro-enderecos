@@ -1,9 +1,11 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { Button, Form } from 'semantic-ui-react';
-import  { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const Cadastro = () => {
+  let navigate = useNavigate();
+
   const [enderecos, setEnderecos] = useState([]);
   const [bairros, setBairros] = useState([]);
   const [nome, setNome] = useState('');
@@ -30,6 +32,7 @@ const Cadastro = () => {
         enderecos: [...enderecos]
       })
       .then(res => {
+        navigate('/pessoas');
         setMessage(res.data.mensagem);
       });
   }
