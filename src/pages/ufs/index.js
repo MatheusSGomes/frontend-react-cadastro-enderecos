@@ -96,6 +96,18 @@ function UFs() {
     setSigla('');
   }
 
+  function handleChangeStatus(codigo_uf, status) {
+    (status == 1) ? (status = 0) : (status = 1)
+
+    axios
+      .put(`http://localhost:8000/api/uf/${codigo_uf}`, {
+        status: status
+      })
+      .then(res => {
+        getData();
+      })
+  }
+
   return (
     <div>
       <h2 className="mt-4">Lista de UFs</h2>
@@ -132,9 +144,14 @@ function UFs() {
       <ul className="list-group mb-4">
         {data.map((uf, index) => (
           <li key={index} id={uf.codigo_uf} className="list-group-item d-flex justify-content-between align-items-center">
-            <div class="form-check form-switch" style={{display: 'inline-block'}}>
-              {/* <label class="form-check-label" for="flexSwitchCheckDefault"></label> */}
-              <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" />
+            <div className="form-check form-switch" style={{display: 'inline-block'}}>
+            <input 
+              className="form-check-input" 
+              type="checkbox" 
+              id="flexSwitchCheckDefault"
+              defaultChecked={uf.status}
+              onChange={() => handleChangeStatus(uf.codigo_uf, uf.status)}
+            />
               {uf.sigla} - {uf.nome}
             </div>
 
