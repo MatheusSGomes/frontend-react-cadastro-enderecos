@@ -51,7 +51,7 @@ function Bairros() {
       .then(res => {
         getBairros();
         setMessage('Bairro atualizado com sucesso');
-      })
+      });
   }
 
   const deleteBairros = (id) => {
@@ -77,6 +77,18 @@ function Bairros() {
   const clearInputs = () => {
     setNomeBairro('');
     setCodigoMunicipio('');
+  }
+
+  const handleChangeStatus = (codigo_bairro, status_bairro) => {
+    (status_bairro == 1) ? (status_bairro = 0) : (status_bairro = 1)
+
+    axios
+      .put(`http://localhost:8000/api/bairro/${codigo_bairro}`, {
+        status: status_bairro
+      })
+      .then(res => {
+        getBairros();
+      });
   }
 
   return (
@@ -145,7 +157,18 @@ function Bairros() {
       <ul className="list-group mb-4">
         {bairros.map((bairro) => (
           <li className="list-group-item d-flex justify-content-between align-items-center" key={bairro.codigo_bairro}>
-            {bairro.nome}
+            <div className="form-check form-switch" style={{display: 'inline-block'}}>
+              <input 
+                className="form-check-input" 
+                type="checkbox" 
+                id="flexSwitchCheckDefault"
+                defaultChecked={bairro.status}
+                onChange={() => handleChangeStatus(bairro.codigo_bairro, bairro.status)}
+              />
+              {bairro.nome}
+            </div>
+
+            
             <div>
               <Button 
                 type="button" 
