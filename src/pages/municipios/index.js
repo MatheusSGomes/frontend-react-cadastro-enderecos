@@ -84,6 +84,18 @@ function Municipios() {
     setUfMunicipio('');
   }
 
+  const handleChangeStatus = (codigo_municipio, status_municipio) => {
+    (status_municipio == 1) ? (status_municipio = 0) : (status_municipio = 1)
+
+    axios
+      .put(`http://localhost:8000/api/municipio/${codigo_municipio}`, {
+        status: status_municipio
+      })
+      .then(res => {
+        getMunicipios();
+      })
+  }
+
   return (
     <div>
       <h2 className="mt-4">Lista de Municípios</h2>
@@ -139,7 +151,18 @@ function Municipios() {
       <ul className="list-group mb-4">
         {municipios.map((municipio) => (
           <li className="list-group-item d-flex justify-content-between align-items-center" key={municipio.codigo_municipio}>
-            {municipio.nome}
+
+            <div className="form-check form-switch" style={{display: 'inline-block'}}>
+              <input 
+                className="form-check-input" 
+                type="checkbox" 
+                id="flexSwitchCheckDefault"
+                defaultChecked={municipio.status}
+                onChange={() => handleChangeStatus(municipio.codigo_municipio, municipio.status)}
+              />
+              {municipio.nome}
+            </div>
+
             <div>
               <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target={`#modalEditarMunicipio${municipio.codigo_municipio}`}>Editar</button>
               
