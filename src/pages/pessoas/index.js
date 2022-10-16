@@ -19,6 +19,7 @@ function Pessoas () {
   const [bairroEndereco, setBairroEndereco] = useState('');
   const [cepEndereco, setCepEndereco] = useState('');
   const [complementoEndereco, setComplementoEndereco] = useState('');
+  const [message, setMessage] = useState('');
 
   useEffect(() => {
     getPessoas();
@@ -50,7 +51,10 @@ function Pessoas () {
         senha: senhaPessoa,
         status: 1
       })
-      .then(res => getPessoas());
+      .then(res => {
+        getPessoas();
+        setMessage('Pessoa atualizada com sucesso');
+      });
   }
 
   const novoEndereco = (id_usuario) => {
@@ -80,7 +84,10 @@ function Pessoas () {
           }
         ]
       })
-      .then(res => getPessoas());
+      .then(res => {
+        getPessoas();
+        setMessage('Endereço adicionado com sucesso');
+      });
   }
 
   const updateEndereco = (codigo_pessoa, codigo_endereco) => {
@@ -110,7 +117,10 @@ function Pessoas () {
           }
         ]
       })
-      .then(res => getPessoas());
+      .then(res => {
+        getPessoas();
+        setMessage('Endereço atualizado com sucesso');
+      });
   }
 
   const deletePessoa = (id) => {
@@ -118,7 +128,7 @@ function Pessoas () {
       .delete(`http://localhost:8000/api/pessoa/${id}`)
       .then(res => {
         getPessoas();
-        console.log(res);
+        setMessage(res.data.message);
       });
   }
 
@@ -132,8 +142,19 @@ function Pessoas () {
       })
       .then((res) => {
         getPessoas();
-        console.log(res);
+        setMessage(res.data.message);
       });
+  }
+
+  const renderMessage = () => {
+    if (message != '') {
+      return (
+        <div className="alert alert-success alert-dismissible fade show" role="alert">
+          {message}
+          <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>  
+      );
+    }
   }
 
   return (
@@ -143,10 +164,7 @@ function Pessoas () {
       <hr />
       <Link to="/" className="btn btn-primary mb-4">Cadastrar Pessoa</Link>
 
-      <div className="alert alert-success alert-dismissible fade show" role="alert">
-        Mensagem sucesso
-        <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-      </div>
+      {renderMessage()}
 
       <ul className="list-group mb-4">
         {pessoas.map((pessoa) => {
