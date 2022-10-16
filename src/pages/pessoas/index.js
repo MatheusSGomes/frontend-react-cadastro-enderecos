@@ -157,6 +157,16 @@ function Pessoas () {
     }
   }
 
+  const handleChangeStatus = (codigo_pessoa, status_pessoa) => {
+    (status_pessoa == 1) ? (status_pessoa = 0) : (status_pessoa = 1)
+
+    axios
+      .put(`http://localhost:8000/api/pessoa/${codigo_pessoa}`, {
+        status: status_pessoa
+      })
+      .then(res => getPessoas());
+  }
+
   return (
     <div>
       <h2 className="mt-4">Lista de Pessoas</h2>
@@ -170,7 +180,17 @@ function Pessoas () {
         {pessoas.map((pessoa) => {
           return (
             <li className="list-group-item d-flex justify-content-between align-items-center" key={pessoa.codigo_pessoa}>
-              {pessoa.nome}
+              <div className="form-check form-switch" style={{display: 'inline-block'}}>
+                <input 
+                  className="form-check-input" 
+                  type="checkbox" 
+                  id="flexSwitchCheckDefault"
+                  defaultChecked={pessoa.status}
+                  onChange={() => handleChangeStatus(pessoa.codigo_pessoa, pessoa.status)}
+                />
+                {pessoa.nome} - {pessoa.status}
+              </div>
+
               <div>
                 <Button 
                   type="button" 

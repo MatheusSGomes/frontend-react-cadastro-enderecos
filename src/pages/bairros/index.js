@@ -168,7 +168,6 @@ function Bairros() {
               {bairro.nome}
             </div>
 
-            
             <div>
               <Button 
                 type="button" 
