@@ -43,7 +43,8 @@ function Municipios() {
         getMunicipios();
         setMessage('Município adicionado com sucesso');
         handleSubmit();
-      });
+      })
+      .catch(error => setMessage(error.response.data.mensagem));
   };
 
   const deleteMunicipio = (id) => {
@@ -55,12 +56,14 @@ function Municipios() {
       })
   }
 
-  const updateMunicipio = (id) => {
+  const updateMunicipio = (codigo_municipio) => {
+    const municipio = municipios.find((municipio) => municipio.codigo_municipio == codigo_municipio);
+
     axios
-      .put(`http://localhost:8000/api/municipio/${id}`, {
+      .put(`http://localhost:8000/api/municipio/${codigo_municipio}`, {
         nome: nomeMunicipio,
         codigo_uf: ufMunicipio,
-        status: 1
+        status: municipio.status
       })
       .then(res => {
         getMunicipios();
@@ -129,8 +132,8 @@ function Municipios() {
 
                 <div className="col-3">
                   <label htmlFor="uf" className="form-label">UF</label>
-                  <select id="uf" name="uf" className="form-select" onChange={(e) => setUfMunicipio(e.target.value)}>
-                    <option value="DEFAULT" disabled>Escolha...</option>
+                  <select id="uf" name="uf" className="form-select" defaultValue="DEFAULT" onChange={(e) => setUfMunicipio(e.target.value)}>
+                    <option disabled defaultValue="DEFAULT">Escolha...</option>
                     {ufs.map((uf) => (
                       <option key={uf.codigo_uf} value={uf.codigo_uf}>{uf.sigla}</option>
                     ))}
@@ -205,8 +208,8 @@ function Municipios() {
                       </Form.Field>
                       
                     <div className="modal-footer p-0 pt-1">
-                      <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-                      <Button type='submit' className="btn btn-primary">Atualizar</Button>
+                      <Button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Fechar</Button>
+                      <Button type='submit' className="btn btn-primary" data-bs-dismiss="modal">Atualizar</Button>
                     </div>
                   </Form>
                 </div>

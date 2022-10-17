@@ -41,12 +41,14 @@ function Bairros() {
       });
   }
 
-  const updateBairro = (id) => {
+  const updateBairro = (codigo_bairro) => {
+    const bairro = bairros.find((bairro) => bairro.codigo_bairro == codigo_bairro)
+
     axios
-      .put(`http://localhost:8000/api/bairro/${id}`, {
+      .put(`http://localhost:8000/api/bairro/${codigo_bairro}`, {
         municipio: codigoMunicipio,
         nome: nomeBairro,
-        status: 1
+        status: bairro.status
       })
       .then(res => {
         getBairros();

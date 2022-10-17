@@ -50,11 +50,13 @@ function UFs() {
   }
 
   const updateUf = (codigo) => {
+    const uf = data.find((uf) => uf.codigo_uf == codigo);
+
     axios
       .put(`http://localhost:8000/api/uf/${codigo}`, {
         nome: nome,
         sigla: sigla,
-        status: 1
+        status: uf.status
       })
       .then(res => {
         setMessage('UF atualizada com sucesso');
@@ -154,7 +156,6 @@ function UFs() {
             />
               {uf.sigla} - {uf.nome}
             </div>
-
 
             <div>
               <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target={`#modalEditarUF${uf.codigo_uf}`}>Editar</button>

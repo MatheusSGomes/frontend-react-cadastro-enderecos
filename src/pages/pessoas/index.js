@@ -62,20 +62,20 @@ function Pessoas () {
       return pess.codigo_pessoa == id_usuario;
     }
 
-    const pessFind = pessoas.find(findPessoa);
+    const pessoa = pessoas.find(findPessoa);
 
     axios
       .put(`http://localhost:8000/api/pessoa/${id_usuario}`, {
-        codigo_pessoa: pessFind.codigo_pessoa,
-        nome: pessFind.nome,
-        sobrenome: pessFind.sobrenome,
-        idade: pessFind.idade,
-        login: pessFind.login,
-        senha: pessFind.senha,
+        codigo_pessoa: pessoa.codigo_pessoa,
+        nome: pessoa.nome,
+        sobrenome: pessoa.sobrenome,
+        idade: pessoa.idade,
+        login: pessoa.login,
+        senha: pessoa.senha,
         enderecos: [
           {
             "codigo_endereco": null,
-            "codigo_pessoa": pessFind.codigo_pessoa,
+            "codigo_pessoa": pessoa.codigo_pessoa,
             "codigoBairro": bairroEndereco,
             "nomeRua": ruaEndereco,
             "numero": numeroEndereco,
@@ -91,24 +91,21 @@ function Pessoas () {
   }
 
   const updateEndereco = (codigo_pessoa, codigo_endereco) => {
-    function findPessoa(pess) {
-      return pess.codigo_pessoa == codigo_pessoa;
-    }
-    
-    const pessFind = pessoas.find(findPessoa);
+    const pessoa = pessoas.find((pessoa) => pessoa.codigo_pessoa == codigo_pessoa);
 
     axios
       .put(`http://localhost:8000/api/pessoa/${codigo_pessoa}`, {
-        codigo_pessoa: pessFind.codigo_pessoa,
-        nome: pessFind.nome,
-        sobrenome: pessFind.sobrenome,
-        idade: pessFind.idade,
-        login: pessFind.login,
-        senha: pessFind.senha,
+        codigo_pessoa: pessoa.codigo_pessoa,
+        nome: pessoa.nome,
+        sobrenome: pessoa.sobrenome,
+        idade: pessoa.idade,
+        login: pessoa.login,
+        senha: pessoa.senha,
+        status: pessoa.status,
         enderecos: [
           {
             "codigo_endereco": codigo_endereco,
-            "codigo_pessoa": pessFind.codigo_pessoa,
+            "codigo_pessoa": pessoa.codigo_pessoa,
             "codigoBairro": bairroEndereco,
             "nomeRua": ruaEndereco,
             "numero": numeroEndereco,
@@ -188,7 +185,7 @@ function Pessoas () {
                   defaultChecked={pessoa.status}
                   onChange={() => handleChangeStatus(pessoa.codigo_pessoa, pessoa.status)}
                 />
-                {pessoa.nome} - {pessoa.status}
+                {pessoa.nome}
               </div>
 
               <div>
