@@ -1,9 +1,9 @@
-// https://www.freecodecamp.org/portuguese/news/como-realizar-operacoes-de-crud-usando-react-hooks-do-react-e-axios/
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { Form, Button } from 'semantic-ui-react';
 import './style.css';
 import Title from '../../Components/Title';
+import AlertMessage from '../../Components/AlertMessage';
 
 const formDeleteStyle = {
   display: "inline-block",
@@ -83,26 +83,6 @@ function UFs() {
     event.preventDefault();
     setNome('');
     setSigla('');
-  }
-
-  const renderMessage = () => {
-    if(message != '') {
-      return (<div className="alert alert-success alert-dismissible fade show" role="alert">
-      <p>{message}</p>
-      <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>);
-    }
-  }
-
-  const AlertMessage = (props) => {
-    return (
-      <div 
-        className={`alert alert-${props.type} alert-dismissible fade show`} 
-        role="alert">
-        <p>{props.message}</p>
-        <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-      </div>
-    );
   }
 
   function onClickCadastrarUf () {
