@@ -2,6 +2,7 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { Form, Button } from 'semantic-ui-react';
+import Title from '../../Components/Title';
 
 const formDeleteStyle = {
   display: "inline-block",
@@ -101,9 +102,8 @@ function Municipios() {
 
   return (
     <div>
-      <h2 className="mt-4">Lista de Municípios</h2>
-
-      <hr />
+      <Title>Lista de Municípios</Title>
+      
       <button type="button" className="btn btn-primary mb-4" data-bs-toggle="modal" data-bs-target="#modalCadastroMunicipio">
         Cadastrar Município
       </button>

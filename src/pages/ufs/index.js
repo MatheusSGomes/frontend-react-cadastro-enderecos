@@ -3,6 +3,7 @@ import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { Form, Button } from 'semantic-ui-react';
 import './style.css';
+import Title from '../../Components/Title';
 
 const formDeleteStyle = {
   display: "inline-block",
@@ -13,7 +14,7 @@ function UFs() {
   const [nome, setNome] = useState('');
   const [sigla, setSigla] = useState('');
   const [data, setData] = useState([]);
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState([]);
 
   const getData = () => {
     axios
@@ -41,11 +42,11 @@ function UFs() {
         status: 1
       })
       .then(res => {
-        setMessage(res.data.mensagem);
+        setMessage([res.data.mensagem, 'success']);
         getData();
       })
       .catch(error => {
-        setMessage(error.response.data.mensagem);
+        setMessage([error.response.data.mensagem, 'danger']);
       });
   }
 
@@ -59,11 +60,11 @@ function UFs() {
         status: uf.status
       })
       .then(res => {
-        setMessage('UF atualizada com sucesso');
+        setMessage(['UF atualizada com sucesso', 'success']);
         getData();
       })
       .catch(error => {
-        setMessage(error.response.data.mensagem);
+        setMessage([error.response.data.mensagem, 'danger']);
       });
   }
 
@@ -72,10 +73,10 @@ function UFs() {
     axios
       .delete(`http://localhost:8000/api/uf/${id}`)
       .then(res => {
-        setMessage('UF Apagada com sucesso');
+        setMessage(['UF Apagada com sucesso', 'warning']);
         getData();
       })
-      .catch(error => setMessage(error.response.data.mensagem));
+      .catch(error => setMessage([error.response.data.mensagem, 'danger']));
   }
 
   const handleSubmit = event => {
@@ -91,6 +92,17 @@ function UFs() {
       <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>);
     }
+  }
+
+  const AlertMessage = (props) => {
+    return (
+      <div 
+        className={`alert alert-${props.type} alert-dismissible fade show`} 
+        role="alert">
+        <p>{props.message}</p>
+        <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    );
   }
 
   function onClickCadastrarUf () {
@@ -112,8 +124,7 @@ function UFs() {
 
   return (
     <div>
-      <h2 className="mt-4">Lista de UFs</h2>
-      <hr />
+      <Title>Lista de UFs</Title>
 
       <button type="button" className="btn btn-primary mb-4" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={onClickCadastrarUf}>
         Cadastrar UF
@@ -158,7 +169,7 @@ function UFs() {
         </div>
       </div>
 
-      {renderMessage()}
+      <AlertMessage message={message[0]} type={message[1]} />
 
       <ul className="list-group mb-4">
         {data.map((uf, index) => (

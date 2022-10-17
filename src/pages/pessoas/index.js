@@ -3,6 +3,7 @@ import { Button, Form } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import './style.css';
+import Title from '../../Components/Title';
 
 function Pessoas () {
   const [pessoas, setPessoas] = useState([]);
@@ -196,9 +197,8 @@ function Pessoas () {
 
   return (
     <div>
-      <h2 className="mt-4">Lista de Pessoas</h2>
-
-      <hr />
+      <Title>Lista de Pessoas</Title>
+      
       <Link to="/" className="btn btn-primary mb-4">Cadastrar Pessoa</Link>
 
       {renderMessage()}
@@ -309,8 +309,7 @@ function Pessoas () {
                           <h3 className="mb-2">Endereços</h3>
                           <Button 
                             type="button" 
-                            className="btn btn-sm btn-secondary mb-3" 
-                            // data-bs-target="#modalAdicionarEnderecoToggle" 
+                            className="btn btn-sm btn-secondary mb-3"
                             data-bs-target={`#modalAdicionarEnderecoToggle${pessoa.codigo_pessoa}`} 
                             data-bs-toggle="modal" 
                             data-bs-dismiss="modal"

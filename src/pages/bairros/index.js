@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Button, Form } from "semantic-ui-react";
 import './style.css';
+import Title from '../../Components/Title';
 
 function Bairros() {
   const [bairros, setBairros] = useState([]);
@@ -96,9 +97,8 @@ function Bairros() {
 
   return (
     <div>
-      <h2 className="mt-4">Lista de Bairros</h2>
+      <Title>Lista de Bairros</Title>
 
-      <hr />
       <button type="button" className="btn btn-primary mb-4" data-bs-toggle="modal" data-bs-target="#modalCadastrarBairro">
         Cadastrar Bairro
       </button>
