@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { Button, Form } from 'semantic-ui-react';
 import { useNavigate } from 'react-router-dom';
+import AlertMessage from '../Components/AlertMessage';
 
 const Cadastro = () => {
   let navigate = useNavigate();
@@ -32,9 +33,9 @@ const Cadastro = () => {
       })
       .then(res => {
         navigate('/pessoas');
-        setMessage(res.data.mensagem);
+        setMessage([res.data.mensagem, 'success']);
       })
-      .catch(error => setMessage(error.response.data.mensagem));
+      .catch(error => setMessage([error.response.data.mensagem, 'danger']));
   }
 
   const adicionarEndereco = () => {
@@ -78,17 +79,6 @@ const Cadastro = () => {
       .then(res => setBairros(res.data));
   }
 
-  const renderMessage = () => {
-    if (message != '') {
-      return (
-        <div className="alert alert-success alert-dismissible fade show" role="alert">
-          {message}
-          <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>  
-      );
-    }
-  }
-
   return (
     <div>
             
@@ -98,7 +88,7 @@ const Cadastro = () => {
       
       <h2 className="mb-4">Cadastro de Usuário</h2>
 
-      {renderMessage()}
+      <AlertMessage message={message[0]} type={message[1]} />
       
       <Form className="row g-3 mb-5" method="POST" onSubmit={() => postPessoa()}>
 
@@ -265,6 +255,7 @@ const Cadastro = () => {
             </div>
           ))}
         </div>
+        
         <div className="col-12">
           <Button 
             type="submit" 

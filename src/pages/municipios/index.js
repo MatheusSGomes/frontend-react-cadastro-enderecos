@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { Form, Button } from 'semantic-ui-react';
 import Title from '../../Components/Title';
+import AlertMessage from '../../Components/AlertMessage';
 
 const formDeleteStyle = {
   display: "inline-block",
@@ -14,7 +15,7 @@ function Municipios() {
   const [ufMunicipio, setUfMunicipio] = useState('');
   const [municipios, setMunicipios] = useState([]);
   const [ufs, setUfs] = useState([]);
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState([]);
 
   useEffect(() => {
     axios
@@ -42,10 +43,10 @@ function Municipios() {
       })
       .then(res => {
         getMunicipios();
-        setMessage('Município adicionado com sucesso');
+        setMessage(['Município adicionado com sucesso', 'success']);
         handleSubmit();
       })
-      .catch(error => setMessage(error.response.data.mensagem));
+      .catch(error => setMessage([error.response.data.mensagem, 'danger']));
   };
 
   const deleteMunicipio = (id) => {
@@ -53,8 +54,9 @@ function Municipios() {
       .delete(`http://localhost:8000/api/municipio/${id}`)
       .then(res => {
         getMunicipios();
-        setMessage('Município apagado com sucesso');
+        setMessage(['Município apagado com sucesso', 'success']);
       })
+      .catch(error => setMessage([error.response.data.mensagem, 'warning']));
   }
 
   const updateMunicipio = (codigo_municipio) => {
@@ -68,19 +70,9 @@ function Municipios() {
       })
       .then(res => {
         getMunicipios();
-        setMessage('Município atualizado com sucesso');
+        setMessage(['Município atualizado com sucesso', 'success']);
       })
-  }
-
-  const renderMessage = () => {
-    if (message != '') {
-      return (
-        <div className="alert alert-success alert-dismissible fade show" role="alert">
-          <p>{message}</p>
-          <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-      );
-    }
+      .catch(error => setMessage([error.response.data.mensagem, 'warning']));
   }
 
   const handleSubmit = () => {
@@ -156,7 +148,7 @@ function Municipios() {
         </div>
       </div>
 
-      {renderMessage()}
+      <AlertMessage message={message[0]} type={message[1]} />
 
       <ul className="list-group mb-4">
         {municipios.map((municipio) => (

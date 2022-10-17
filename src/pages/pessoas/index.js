@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import './style.css';
 import Title from '../../Components/Title';
+import AlertMessage from '../../Components/AlertMessage';
 
 function Pessoas () {
   const [pessoas, setPessoas] = useState([]);
@@ -55,7 +56,7 @@ function Pessoas () {
       })
       .then(res => {
         getPessoas();
-        setMessage('Pessoa atualizada com sucesso');
+        setMessage(['Pessoa atualizada com sucesso', 'success']);
       });
   }
 
@@ -89,11 +90,11 @@ function Pessoas () {
       })
       .then(res => {
         getPessoas();
-        setMessageEndereco('Endereço adicionado com sucesso');
+        setMessageEndereco(['Endereço adicionado com sucesso', 'success']);
         clearSubmitForm();
       })
       .catch(error => {
-        setMessageEndereco('Não foi possível adicionar o novo endereço. Verifique se todos os campos estão preenchidos.');
+        setMessageEndereco(['Não foi possível adicionar o novo endereço. Verifique se todos os campos estão preenchidos.', 'danger']);
       });
   }
 
@@ -123,7 +124,7 @@ function Pessoas () {
       })
       .then(res => {
         getPessoas();
-        setMessage('Endereço atualizado com sucesso');
+        setMessageEndereco(['Endereço atualizado com sucesso', 'success']);
       });
   }
 
@@ -132,7 +133,7 @@ function Pessoas () {
       .delete(`http://localhost:8000/api/pessoa/${id}`)
       .then(res => {
         getPessoas();
-        setMessage(res.data.message);
+        setMessage([res.data.message, 'warning']);
       });
   }
 
@@ -146,30 +147,8 @@ function Pessoas () {
       })
       .then((res) => {
         getPessoas();
-        setMessage(res.data.message);
+        setMessageEndereco([res.data.message, 'warning']);
       });
-  }
-
-  const renderMessage = () => {
-    if (message != '') {
-      return (
-        <div className="alert alert-success alert-dismissible fade show" role="alert">
-          {message}
-          <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>  
-      );
-    }
-  }
-
-  const renderMessageEndereco = () => {
-    if (messageEndereco != '') {
-      return (
-        <div className="alert alert-success alert-dismissible fade show" role="alert">
-          {messageEndereco}
-          <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>  
-      );
-    }
   }
 
   const handleChangeStatus = (codigo_pessoa, status_pessoa) => {
@@ -201,7 +180,7 @@ function Pessoas () {
       
       <Link to="/" className="btn btn-primary mb-4">Cadastrar Pessoa</Link>
 
-      {renderMessage()}
+      <AlertMessage message={message[0]} type={message[1]} />
 
       <ul className="list-group mb-4">
         {pessoas.map((pessoa) => {
@@ -317,7 +296,7 @@ function Pessoas () {
                             Adicionar Endereço
                           </Button>
 
-                          {renderMessageEndereco()}
+                          <AlertMessage message={messageEndereco[0]} type={messageEndereco[1]} />
 
                           <ul className="list-group">
                             {pessoa.enderecos.map((endereco, index) => (

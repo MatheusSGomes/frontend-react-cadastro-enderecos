@@ -3,13 +3,14 @@ import { useEffect, useState } from "react";
 import { Button, Form } from "semantic-ui-react";
 import './style.css';
 import Title from '../../Components/Title';
+import AlertMessage from '../../Components/AlertMessage';
 
 function Bairros() {
   const [bairros, setBairros] = useState([]);
   const [municipios, setMunicipios] = useState([]);
   const [nomeBairro, setNomeBairro] = useState('');
   const [codigoMunicipio, setCodigoMunicipio] = useState('');
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState([]);
 
   useEffect(() => {
     axios
@@ -37,10 +38,10 @@ function Bairros() {
       })
       .then(res => {
         getBairros();
-        setMessage(res.data.mensagem);
+        setMessage([res.data.mensagem, 'success']);
         clearInputs();
       })
-      .catch(error => setMessage(error.response.data.mensagem));
+      .catch(error => setMessage([error.response.data.mensagem, 'danger']));
   }
 
   const updateBairro = (codigo_bairro) => {
@@ -54,8 +55,9 @@ function Bairros() {
       })
       .then(res => {
         getBairros();
-        setMessage('Bairro atualizado com sucesso');
-      });
+        setMessage(['Bairro atualizado com sucesso', 'success']);
+      })
+      .catch(error => setMessage([error.response.data.mensagem, 'danger']));;
   }
 
   const deleteBairros = (id) => {
@@ -63,19 +65,9 @@ function Bairros() {
       .delete(`http://localhost:8000/api/bairro/${id}`)
       .then(res => {
         getBairros();
-        setMessage('Bairro apagado com sucesso');
-      });
-  }
-
-  const renderMessage = () => {
-    if (message != '') {
-      return (
-        <div className="alert alert-success alert-dismissible fade show" role="alert">
-          {message}
-          <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div> 
-      );
-    }
+        setMessage(['Bairro apagado com sucesso', 'warning']);
+      })
+      .catch(error => setMessage([error.response.data.mensagem, 'danger']));;
   }
 
   const clearInputs = () => {
@@ -157,7 +149,7 @@ function Bairros() {
         </div>
       </div>
 
-      {renderMessage()}
+      <AlertMessage message={message[0]} type={message[1]} />
 
       <ul className="list-group mb-4">
         {bairros.map((bairro) => (
