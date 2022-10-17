@@ -15,7 +15,6 @@ const Cadastro = () => {
   const [senha, setSenha] = useState('');
   const [message, setMessage] = useState('');
 
-
   useEffect(() => {
     getBairros();
   }, [])
@@ -34,7 +33,8 @@ const Cadastro = () => {
       .then(res => {
         navigate('/pessoas');
         setMessage(res.data.mensagem);
-      });
+      })
+      .catch(error => setMessage(error.response.data.mensagem));
   }
 
   const adicionarEndereco = () => {
@@ -112,6 +112,7 @@ const Cadastro = () => {
                 id="nome" 
                 name="nome" 
                 onChange={(e) => setNome(e.target.value)}
+                required
               />
             </div>
         
@@ -123,6 +124,7 @@ const Cadastro = () => {
                 id="sobrenome" 
                 name="sobrenome" 
                 onChange={(e) => setSobrenome(e.target.value)}
+                required
               />
             </div>
         
@@ -134,6 +136,7 @@ const Cadastro = () => {
                 id="idade" 
                 name="idade" 
                 onChange={(e) => setIdade(e.target.value)}
+                required
               />
             </div>
         
@@ -145,6 +148,7 @@ const Cadastro = () => {
                 id="login" 
                 name="login" 
                 onChange={(e) => setLogin(e.target.value)}
+                required
               />
             </div>
         
@@ -157,6 +161,7 @@ const Cadastro = () => {
                 id="senha" 
                 name="senha"
                 onChange={(e) => setSenha(e.target.value)}
+                required
               />
             </div>
           </div>
@@ -174,85 +179,91 @@ const Cadastro = () => {
         </div>
 
         <div className="enderecos" id="enderecos">
-            {enderecos.map((endereco, index) => (
-              <div className="endereco">
-                <h3 className="mt-4 mb-4">Cadastrar endereço ({index + 1})</h3>
-                <hr />
-                <div key={endereco.key}>
-                  <div className="row g-3">
-                    <div className="col-4">
-                      <label htmlFor="rua" className="form-label">Rua</label>
-                      <input 
-                        type="text" 
-                        className="form-control" 
-                        id="rua" 
-                        name="nomeRua"
-                        value={endereco.nomeRua}
-                        onChange={(e) => handleInputChange(endereco.key, e)}
-                      />
-                    </div>
-                
-                    <div className="col-4">
-                      <label htmlFor="numero" className="form-label">Número</label>
-                      <input 
-                        type="text" 
-                        className="form-control" 
-                        id="numero" 
-                        name="numero"
-                        value={endereco.numero}
-                        onChange={(e) => handleInputChange(endereco.key, e)}
-                      />
-                    </div>
-                
-                    <div className="col-4">
-                      <label htmlFor="bairro" className="form-label">Bairro</label>
-                      <select 
-                        id="bairro" 
-                        className="form-select" 
-                        name="codigoBairro"
-                        value={endereco.codigoBairro}
-                        onChange={(e) => handleInputChange(endereco.key, e)}
-                      >
-                        {bairros.map((bairro) => (
-                          <option value={bairro.codigo_bairro}>{bairro.nome}</option>
-                        ))}
-                      </select>
-                    </div>  
-                
-                    <div className="col-4">
-                      <label htmlFor="cep" className="form-label">CEP</label>
-                      <input 
-                        type="text" 
-                        className="form-control" 
-                        id="cep" 
-                        name="cep"
-                        value={endereco.cep}
-                        onChange={(e) => handleInputChange(endereco.key, e)}
-                      />
-                    </div>
-                
-                    <div className="col-8">
-                      <label htmlFor="complemento" className="form-label">Complemento</label>
-                      <input 
-                        type="text" 
-                        className="form-control" 
-                        id="complemento" 
-                        name="complemento"
-                        value={endereco.complemento}
-                        onChange={(e) => handleInputChange(endereco.key, e)}  
-                      />
-                    </div>
+          {enderecos.map((endereco, index) => (
+            <div className="endereco">
+              <h3 className="mt-4 mb-4">Cadastrar endereço ({index + 1})</h3>
+              <hr />
+              <div key={endereco.key}>
+                <div className="row g-3">
+                  <div className="col-4">
+                    <label htmlFor="rua" className="form-label">Rua</label>
+                    <input 
+                      type="text" 
+                      className="form-control" 
+                      id="rua" 
+                      name="nomeRua"
+                      value={endereco.nomeRua}
+                      onChange={(e) => handleInputChange(endereco.key, e)}
+                      required
+                    />
                   </div>
-
-                  <Button
-                    // className="btn btn-danger mt-2 d-none"
-                    className="btn btn-danger mt-2"
-                    id="remover-endereco"
-                    onClick={() => removerEndereco(endereco.key)}
-                  >Remover endereço</Button>
+              
+                  <div className="col-4">
+                    <label htmlFor="numero" className="form-label">Número</label>
+                    <input 
+                      type="text" 
+                      className="form-control" 
+                      id="numero" 
+                      name="numero"
+                      value={endereco.numero}
+                      onChange={(e) => handleInputChange(endereco.key, e)}
+                      required
+                    />
+                  </div>
+              
+                  <div className="col-4">
+                    <label htmlFor="bairro" className="form-label">Bairro</label>
+                    <select 
+                      id="bairro" 
+                      className="form-select" 
+                      name="codigoBairro"
+                      value={endereco.codigoBairro}
+                      onChange={(e) => handleInputChange(endereco.key, e)}
+                      required
+                    >
+                      <option key={index} disabled selected>Escolha...</option>
+                      {bairros.map((bairro, index) => (
+                        <option key={bairro.codigo_bairro} value={bairro.codigo_bairro}>{bairro.nome}</option>
+                      ))}
+                    </select>
+                  </div>
+              
+                  <div className="col-4">
+                    <label htmlFor="cep" className="form-label">CEP</label>
+                    <input 
+                      type="text" 
+                      className="form-control" 
+                      id="cep" 
+                      name="cep"
+                      value={endereco.cep}
+                      onChange={(e) => handleInputChange(endereco.key, e)}
+                      required
+                    />
+                  </div>
+              
+                  <div className="col-8">
+                    <label htmlFor="complemento" className="form-label">Complemento</label>
+                    <input 
+                      type="text" 
+                      className="form-control" 
+                      id="complemento" 
+                      name="complemento"
+                      value={endereco.complemento}
+                      onChange={(e) => handleInputChange(endereco.key, e)}  
+                      required
+                    />
+                  </div>
                 </div>
+
+                <Button
+                  // className="btn btn-danger mt-2 d-none"
+                  className="btn btn-danger mt-2"
+                  id="remover-endereco"
+                  onClick={() => removerEndereco(endereco.key)}
+                >Remover endereço</Button>
               </div>
-            ))}
+            </div>
+          ))}
         </div>
         <div className="col-12">
           <Button 

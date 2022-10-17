@@ -119,6 +119,7 @@ function UFs() {
         Cadastrar UF
       </button>
 
+      {/* MODAL ADICIONAR UF */}
       <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div className="modal-dialog modal-md">
           <div className="modal-content">
@@ -129,11 +130,27 @@ function UFs() {
             <Form className="modal-body row g-3" onSubmit={handleSubmit}>
                 <Form.Field className='col-8'>
                   <label htmlFor="nome" className="form-label">Nome</label>
-                  <input type="text" className="form-control" id="nome" name="nome" onChange={(e) => setNome(e.target.value)} value={nome} />
+                  <input 
+                    type="text" 
+                    className="form-control" 
+                    id="nome" 
+                    name="nome" 
+                    onChange={(e) => setNome(e.target.value)} 
+                    value={nome}
+                    required
+                  />
                 </Form.Field>
                 <Form.Field className='col-4'>
                   <label htmlFor="sigla" className="form-label">Sigla</label>
-                  <input type="text" className="form-control" id="sigla" name="sigla" onChange={(e) => setSigla(e.target.value)} value={sigla} />
+                  <input 
+                    type="text" 
+                    className="form-control" 
+                    id="sigla" 
+                    name="sigla" 
+                    onChange={(e) => setSigla(e.target.value)} 
+                    value={sigla}
+                    required 
+                  />
                 </Form.Field>
                 <Button type='submit' className="btn btn-primary" onClick={postUf} data-bs-dismiss="modal">Cadastrar</Button>
             </Form>
@@ -147,13 +164,13 @@ function UFs() {
         {data.map((uf, index) => (
           <li key={index} id={uf.codigo_uf} className="list-group-item d-flex justify-content-between align-items-center">
             <div className="form-check form-switch" style={{display: 'inline-block'}}>
-            <input 
-              className="form-check-input" 
-              type="checkbox" 
-              id="flexSwitchCheckDefault"
-              defaultChecked={uf.status}
-              onChange={() => handleChangeStatus(uf.codigo_uf, uf.status)}
-            />
+              <input 
+                className="form-check-input" 
+                type="checkbox" 
+                id="flexSwitchCheckDefault"
+                defaultChecked={uf.status}
+                onChange={() => handleChangeStatus(uf.codigo_uf, uf.status)}
+              />
               {uf.sigla} - {uf.nome}
             </div>
 
@@ -163,6 +180,7 @@ function UFs() {
               <Button onClick={() => deleteUf(uf.codigo_uf)} className="btn btn-danger" style={formDeleteStyle}>Apagar</Button>
             </div>
 
+            {/* MODAL EDITAR */}
             <div className="modal fade" id={`modalEditarUF${uf.codigo_uf}`} tabIndex="-1" aria-labelledby={`modalLabelUF${uf.codigo_uf}`} aria-hidden="true">
               <div className="modal-dialog modal-md">
                 <div className="modal-content">
@@ -173,11 +191,27 @@ function UFs() {
                   <Form className="modal-body row g-3" onSubmit={() => updateUf(uf.codigo_uf)}>
                       <Form.Field className='col-8'>
                         <label htmlFor="nome" className="form-label">Nome</label>
-                        <input type="text" className="form-control" id="nome" name="nome" onChange={(e) => setNome(e.target.value)} defaultValue={uf.nome} />
+                        <input 
+                          type="text" 
+                          className="form-control" 
+                          id="nome" 
+                          name="nome" 
+                          onChange={(e) => setNome(e.target.value)} 
+                          defaultValue={uf.nome} 
+                          required
+                        />
                       </Form.Field>
                       <Form.Field className='col-4'>
                         <label htmlFor="sigla" className="form-label">Sigla</label>
-                        <input type="text" className="form-control" id="sigla" name="sigla" onChange={(e) => setSigla(e.target.value)} defaultValue={uf.sigla} />
+                        <input 
+                          type="text" 
+                          className="form-control" 
+                          id="sigla" 
+                          name="sigla" 
+                          onChange={(e) => setSigla(e.target.value)} 
+                          defaultValue={uf.sigla} 
+                          required
+                        />
                       </Form.Field>
                       <Button type='submit' className="btn btn-primary" data-bs-dismiss="modal">Atualizar</Button>
                   </Form>

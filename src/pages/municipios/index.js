@@ -118,7 +118,7 @@ function Municipios() {
 
             <Form className="" action="" method="post" onSubmit={postMunicipio}>
               <div className="modal-body row g-3">        
-                <div className="col-9">
+                <div className="col-8">
                   <label htmlFor="nome" className="form-label">Nome</label>
                   <input 
                     type="text" 
@@ -127,13 +127,20 @@ function Municipios() {
                     name="nome" 
                     onChange={(e) => setNomeMunicipio(e.target.value)} 
                     value={nomeMunicipio}
+                    required
                   />
                 </div>
 
-                <div className="col-3">
+                <div className="col-4">
                   <label htmlFor="uf" className="form-label">UF</label>
-                  <select id="uf" name="uf" className="form-select" defaultValue="DEFAULT" onChange={(e) => setUfMunicipio(e.target.value)}>
-                    <option disabled defaultValue="DEFAULT">Escolha...</option>
+                  <select 
+                    id="uf" 
+                    name="uf" 
+                    className="form-select" 
+                    onChange={(e) => setUfMunicipio(e.target.value)}
+                    required
+                  >
+                    <option disabled selected>Escolha...</option>
                     {ufs.map((uf) => (
                       <option key={uf.codigo_uf} value={uf.codigo_uf}>{uf.sigla}</option>
                     ))}
@@ -185,27 +192,33 @@ function Municipios() {
                     <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
                   <Form className="modal-body row g-3" onSubmit={() => updateMunicipio(municipio.codigo_municipio)}>
-                      <Form.Field className='col-8'>
-                        <label htmlFor="nome" className="form-label">Nome</label>
-                        <input 
-                          type="text" 
-                          className="form-control" 
-                          id="nome" 
-                          name="nome" 
-                          onChange={(e) => setNomeMunicipio(e.target.value)} 
-                          defaultValue={municipio.nome} 
-                        />
-                      </Form.Field>
-                      <Form.Field className='col-4'>
-                        <label htmlFor="uf" className="form-label">UF</label>
-                        <select id="uf" name="uf" className="form-select" onChange={(e) => setUfMunicipio(e.target.value)}>
-                          {ufs.map((uf) => (
-                            (uf.codigo_uf == municipio.codigo_uf) 
-                            ? <option key={uf.codigo_uf} value={uf.codigo_uf} selected>{uf.sigla}</option> 
-                            : <option key={uf.codigo_uf} value={uf.codigo_uf}>{uf.sigla}</option>
-                          ))}
-                        </select>
-                      </Form.Field>
+                    <Form.Field className='col-8'>
+                      <label htmlFor="nome" className="form-label">Nome</label>
+                      <input 
+                        type="text" 
+                        className="form-control" 
+                        id="nome" 
+                        name="nome" 
+                        onChange={(e) => setNomeMunicipio(e.target.value)} 
+                        defaultValue={municipio.nome} 
+                        required
+                      />
+                    </Form.Field>
+                    <Form.Field className='col-4'>
+                      <label htmlFor="uf" className="form-label">UF</label>
+                      <select 
+                        id="uf" 
+                        name="uf" 
+                        className="form-select" 
+                        onChange={(e) => setUfMunicipio(e.target.value)}
+                      >
+                        {ufs.map((uf) => (
+                          (uf.codigo_uf == municipio.codigo_uf) 
+                          ? <option key={uf.codigo_uf} value={uf.codigo_uf} selected>{uf.sigla}</option> 
+                          : <option key={uf.codigo_uf} value={uf.codigo_uf}>{uf.sigla}</option>
+                        ))}
+                      </select>
+                    </Form.Field>
                       
                     <div className="modal-footer p-0 pt-1">
                       <Button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Fechar</Button>

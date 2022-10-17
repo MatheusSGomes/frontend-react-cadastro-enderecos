@@ -20,6 +20,7 @@ function Pessoas () {
   const [cepEndereco, setCepEndereco] = useState('');
   const [complementoEndereco, setComplementoEndereco] = useState('');
   const [message, setMessage] = useState('');
+  const [messageEndereco, setMessageEndereco] = useState('');
 
   useEffect(() => {
     getPessoas();
@@ -72,6 +73,7 @@ function Pessoas () {
         idade: pessoa.idade,
         login: pessoa.login,
         senha: pessoa.senha,
+        status: pessoa.status,
         enderecos: [
           {
             "codigo_endereco": null,
@@ -86,7 +88,11 @@ function Pessoas () {
       })
       .then(res => {
         getPessoas();
-        setMessage('Endereço adicionado com sucesso');
+        setMessageEndereco('Endereço adicionado com sucesso');
+        clearSubmitForm();
+      })
+      .catch(error => {
+        setMessageEndereco('Não foi possível adicionar o novo endereço. Verifique se todos os campos estão preenchidos.');
       });
   }
 
@@ -154,6 +160,17 @@ function Pessoas () {
     }
   }
 
+  const renderMessageEndereco = () => {
+    if (messageEndereco != '') {
+      return (
+        <div className="alert alert-success alert-dismissible fade show" role="alert">
+          {messageEndereco}
+          <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>  
+      );
+    }
+  }
+
   const handleChangeStatus = (codigo_pessoa, status_pessoa) => {
     (status_pessoa == 1) ? (status_pessoa = 0) : (status_pessoa = 1)
 
@@ -162,6 +179,19 @@ function Pessoas () {
         status: status_pessoa
       })
       .then(res => getPessoas());
+  }
+
+  const clearSubmitForm = () => {
+    setNomePessoa('');
+    setSobrenomePessoa('');
+    setIdadePessoa('');
+    setLoginPessoa('');
+    setSenhaPessoa('');
+    setRuaEndereco('');
+    setNumeroEndereco('');
+    setBairroEndereco('');
+    setCepEndereco('');
+    setComplementoEndereco('');
   }
 
   return (
@@ -287,6 +317,8 @@ function Pessoas () {
                           >
                             Adicionar Endereço
                           </Button>
+
+                          {renderMessageEndereco()}
 
                           <ul className="list-group">
                             {pessoa.enderecos.map((endereco, index) => (
@@ -466,9 +498,10 @@ function Pessoas () {
                               className="form-select" 
                               name="enderecos[1][bairro]"
                               onChange={(e) => setBairroEndereco(e.target.value)}>
-                              {bairros.map((bairro, index) => (
-                                <option value={bairro.codigo_bairro} key={index}>{bairro.nome}</option>
-                              ))}
+                                <option disabled selected>Escolha...</option>
+                                {bairros.map((bairro, index) => (
+                                  <option value={bairro.codigo_bairro} key={index}>{bairro.nome}</option>
+                                ))}
                             </select>
                           </div>  
                       

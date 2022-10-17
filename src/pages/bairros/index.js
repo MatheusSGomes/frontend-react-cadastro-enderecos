@@ -38,7 +38,8 @@ function Bairros() {
         getBairros();
         setMessage(res.data.mensagem);
         clearInputs();
-      });
+      })
+      .catch(error => setMessage(error.response.data.mensagem));
   }
 
   const updateBairro = (codigo_bairro) => {
@@ -127,6 +128,7 @@ function Bairros() {
                     name="nome" 
                     onChange={(e) => setNomeBairro(e.target.value)}
                     value={nomeBairro}
+                    required
                   />
                 </div>
 
@@ -136,9 +138,10 @@ function Bairros() {
                     id="municipio" 
                     name="municipio" 
                     className="form-select"
-                    onChange={(e) => setCodigoMunicipio(e.target.value)}  
+                    onChange={(e) => setCodigoMunicipio(e.target.value)}
+                    required
                   >
-                    <option disabled>Escolha...</option>
+                    <option disabled selected>Escolha...</option>
                     {municipios.map(((municipio) => (
                       <option value={municipio.codigo_municipio} key={municipio.codigo_municipio}>{municipio.nome}</option>
                     )))}
